@@ -29,6 +29,8 @@ enum FUNCTION {
 	LN,
 	SQRT,
 	ABS,
+	CEIL,
+	FLOOR,
 
 	LOG,
 	MIN,

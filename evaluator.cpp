@@ -18,13 +18,16 @@ double evaluate1(FUNCTION f, double a) {
 	case EXP:
 		return exp(a);
 	case LN:
-		if (a<0) return double();
 		return log(a);
 	case SQRT:
-		if (a < 0) return double();
 		return sqrt(a);
 	case ABS:
 		return fabs(a);
+	case CEIL:
+		return ceil(a);
+	case FLOOR:
+		return floor(a);
+	
 	default:
 		return std::nan("");
 	}
