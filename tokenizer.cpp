@@ -22,6 +22,8 @@ const f_data FUNCTIONS[] = {
 	f_data("ln", LN, F_1),
 	f_data("sqrt", SQRT, F_1),
 	f_data("abs", ABS, F_1),
+	f_data("ceil", CEIL, F_1),
+	f_data("floor", FLOOR, F_1),
 
 	f_data("log", LOG, F_2),
 	f_data("max", MAX, F_2),
@@ -95,7 +97,7 @@ std::queue<token*> parser::get_tokens(const std::string& s) {
 
 		// parenthesis
 		if (s[pos] == '(') {
-			if (!tokens.empty() && (tokens.back()->type == T_SYMBOL || tokens.back()->type == T_CONSTANT)) tokens.push(new t_operator(pos, '*'));
+			if (!tokens.empty() && (tokens.back()->type == T_SYMBOL || tokens.back()->type == T_CONSTANT || tokens.back()->type == T_RIGHT_PAREN)) tokens.push(new t_operator(pos, '*'));  
 			tokens.push(new t_left_paren(pos));
 			pos++;
 			continue;
