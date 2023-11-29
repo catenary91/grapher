@@ -1,7 +1,7 @@
 #include "parser.hpp"
 #include <cmath>
 
-safe<double> evaluate1(FUNCTION f, double a) {
+double evaluate1(FUNCTION f, double a) {
 	switch (f) {
 	case SINH:
 		return sinh(a);
@@ -18,37 +18,37 @@ safe<double> evaluate1(FUNCTION f, double a) {
 	case EXP:
 		return exp(a);
 	case LN:
-		if (a<0) return safe<double>();
+		if (a<0) return double();
 		return log(a);
 	case SQRT:
-		if (a < 0) return safe<double>();
+		if (a < 0) return double();
 		return sqrt(a);
 	case ABS:
 		return fabs(a);
 	default:
-		return safe<double>();
+		return std::nan("");
 	}
 }
 
-safe<double> evaluate2(FUNCTION f, double a, double b) {
+double evaluate2(FUNCTION f, double a, double b) {
 	switch (f) {
 	case LOG:
-		if (a < 0 || a == 1 || b < 0) return safe<double>();
+		if (a < 0 || a == 1 || b < 0) return double();
 		return log(b) / log(a);
 	case MAX:
 		return a > b ? a : b;
 	case MIN:
 		return a > b ? b : a;
 	default:
-		return safe<double>();
+		return std::nan("");
 	}
 }
 
-safe<double> parser::evaluate(double value) {
+double parser::evaluate(double value) {
 	std::stack<double> s;
 	int len = equation.size();
 	double a, b;
-	safe<double> tmp;
+	double tmp;
 	for (int i = 0; i < len; i++) {
 		switch (equation[i]->type) {
 		case T_CONSTANT:
@@ -71,12 +71,12 @@ safe<double> parser::evaluate(double value) {
 				s.push(a * b);
 				break;
 			case '/':
-				if (b == 0) return safe<double>();
+				if (b == 0) return double();
 				s.push(a / b);
 				break;
 			case '^':
 				double result = pow(a, b);
-				if (std::isnan(result)) return safe<double>();
+				if (std::isnan(result)) return double();
 				s.push(result);
 				break;
 			}
@@ -92,8 +92,7 @@ safe<double> parser::evaluate(double value) {
 				a = s.top(); s.pop();
 				tmp = evaluate2(f->f, a, b);
 			}
-			if (!tmp.valid || std::isnan(tmp.v)) return safe<double>();
-			s.push(tmp.v);
+			s.push(tmp);
 			break;
 		}
 	}

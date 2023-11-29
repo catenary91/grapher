@@ -9,14 +9,6 @@
 #include "token.hpp"
 #include "exceptions.hpp"
 
-template <typename T>
-struct safe {
-	T v;
-	bool valid;
-	safe() : v(), valid(false) {}
-	safe(T value) : v(value), valid(true) {}
-};
-
 class parser {
 public:
 	parser(const std::string& s);
@@ -25,7 +17,7 @@ public:
 			std::cout << equation[i]->to_string() << ' ';
 		}
 	}
-	safe<double> evaluate(double value);
+	double evaluate(double value);
 private:
 	std::vector<token*> equation;
 	static void check_syntax(std::queue<token*> tokens);

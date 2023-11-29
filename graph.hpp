@@ -18,21 +18,19 @@ public:
             }
         }
 
-        
-
         int y_prev = -2; // [-1, height], -2 means invalid
         // graph
         for (int i=0; i<width; i++) {
             double x = (xmax - xmin) / width * i + xmin;
-            safe<double> y = p.evaluate(x);
+            double y = p.evaluate(x);
             // std::printf("x=%lf, i=%d, y=%lf, valid=%d, y_prev=%d\n", x, i, y.v, y.valid, y_prev);
 
-            if (!y.valid) {
+            if (std::isnan(y)) {
                 y_prev = -2;
                 continue;
             }
 
-            int y_pixel = std::round(height - (y.v - ymin) / (ymax - ymin) * height);
+            int y_pixel = std::round(height - (y - ymin) / (ymax - ymin) * height);
             if (y_pixel < 0) {
                 y_prev = -1;
                 continue;
