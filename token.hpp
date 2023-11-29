@@ -43,6 +43,7 @@ struct token {
 
 	virtual std::string to_string() = 0;
 	token(int p, TOKEN_TYPE t) : pos(p), type(t) {}
+	virtual ~token() {}
 };
 
 struct t_constant : token {
