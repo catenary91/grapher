@@ -18,6 +18,12 @@ public:
 		}
 	}
 	double evaluate(double value);
+	~parser() {
+		int len = equation.size();
+		for (int i=0; i<len; i++) {
+			delete equation[i];
+		}
+	}
 private:
 	std::vector<token*> equation;
 	static void check_syntax(std::queue<token*> tokens);
