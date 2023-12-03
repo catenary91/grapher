@@ -15,6 +15,18 @@ double evaluate1(FUNCTION f, double a) {
 		return cos(a);
 	case TAN:
 		return tan(a);
+	case ASINH:
+		return asinh(a);
+	case ACOSH:
+		return acosh(a);
+	case ATANH:
+		return atanh(a);
+	case ASIN:
+		return asin(a);
+	case ACOS:
+		return acos(a);
+	case ATAN:
+		return atan(a);
 	case EXP:
 		return exp(a);
 	case LN:
