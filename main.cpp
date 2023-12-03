@@ -9,6 +9,35 @@
 using namespace std;
 using namespace std::string_literals;
 
+const char* help_msg = "\
+grapher : a graphing program based on libpng\n\n\
+usage:\n\
+grapher [-xmin X_MIN] [-xmax X_MAX] [-ymin Y_MIN] [-ymax Y_MAX] -width WIDTH -height HEIGHT -o FILE_PATH -f \"EQUATION\"\n\n\
+-xmin\t\tminimum of the domain (default -10)\n\
+-xmax\t\tmaximum of the domain (default 10)\n\
+-ymin\t\tminimum of the codomain (default -10)\n\
+-ymax\t\tmaximum of the codomain (default 10)\n\
+-width\t\twidth of the output image\n\
+-height\t\theight of the output image\n\
+-o\t\timage file path to write\n\
+-f\t\tfunction to plot; must be an equation respect to \"x\"\n\n\
+available functions:\n\n\
+sin, cos, tan\t     trigonometric functions\n\
+sinh, cosh, tanh     hyperbolic functions\n\
+asin, acos, atan     inverse trigonometric functions\n\
+asinh, acosh, atanh  inverse hyperbolic functions\n\
+exp\t\t     exponential function (e^x)\n\
+ln\t\t     natural logarithm function (log(e, x))\n\
+sqrt\t\t     square root\n\
+abs\t\t     absolute value\n\
+ceil\t\t     ceiling function\n\
+floor\t\t     floor function\n\
+log(a, b)\t     the logarithm of b to base a\n\
+max(a, b)\t     maximum value of a, b\n\
+min(a, b)\t     minimum value of a, b \n\
+\
+";
+
 int main(int argc, char** argv) {
 	string f, path;
 	double xmin = -10, xmax = 10, ymin = -10, ymax = 10;
@@ -20,6 +49,11 @@ int main(int argc, char** argv) {
 	}
 
 	try {
+		if (args[0]=="-help") {
+			cout << help_msg;
+			return 0;
+		}
+
 		f = get_option<string>(args, "-f");
 		path = get_option<string>(args, "-o");
 		height = get_option<int>(args, "-height");
@@ -45,7 +79,8 @@ int main(int argc, char** argv) {
 		cout << "done!\n";
 	}
 	catch (string msg) {
-		cout << msg << '\n';
+		cout << msg;
+		cout << "\nenter \"grapher -help\" to see usages\n";
 		return 1;
 	}
 	catch (const parser_exception& ex) {
