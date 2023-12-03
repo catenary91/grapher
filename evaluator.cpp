@@ -48,7 +48,6 @@ double evaluate1(FUNCTION f, double a) {
 double evaluate2(FUNCTION f, double a, double b) {
 	switch (f) {
 	case LOG:
-		if (a < 0 || a == 1 || b < 0) return double();
 		return log(b) / log(a);
 	case MAX:
 		return a > b ? a : b;
@@ -86,13 +85,12 @@ double parser::evaluate(double value) {
 				s.push(a * b);
 				break;
 			case '/':
-				if (b == 0) return double();
 				s.push(a / b);
 				break;
 			case '^':
-				double result = pow(a, b);
-				if (std::isnan(result)) return double();
-				s.push(result);
+				tmp = pow(a, b);
+				if (std::isnan(tmp)) return tmp;
+				s.push(tmp);
 				break;
 			}
 			break;
@@ -107,6 +105,7 @@ double parser::evaluate(double value) {
 				a = s.top(); s.pop();
 				tmp = evaluate2(f->f, a, b);
 			}
+			if (std::isnan(tmp)) return tmp;
 			s.push(tmp);
 			break;
 		}
