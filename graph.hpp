@@ -23,7 +23,6 @@ public:
         for (int i=0; i<width; i++) {
             double x = (xmax - xmin) / width * i + xmin;
             double y = p.evaluate(x);
-            // std::printf("x=%lf, i=%d, y=%lf, valid=%d, y_prev=%d\n", x, i, y.v, y.valid, y_prev);
 
             if (std::isnan(y)) {
                 y_prev = -2;

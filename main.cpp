@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
 
 		grapher g(f);
 		g.draw(xmin, xmax, ymin, ymax, height, width).save(path);
-		cout << "done!";
+		cout << "done!\n";
 	}
 	catch (string msg) {
 		cout << msg << '\n';
