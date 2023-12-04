@@ -1,5 +1,5 @@
 CC = g++
-PARSER_HEADERS = token.hpp exceptions.hpp parser.hpp
+PARSER_HEADERS = token.hpp parser.hpp
 OBJS = tokenizer.o syntax_checker.o parser.o evaluator.o main.o
 TARGET = grapher
 CXXFLAGS = -Wall -O2 -std=c++17
