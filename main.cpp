@@ -27,7 +27,7 @@ sinh, cosh, tanh     hyperbolic functions\n\
 asin, acos, atan     inverse trigonometric functions\n\
 asinh, acosh, atanh  inverse hyperbolic functions\n\
 exp\t\t     exponential function (e^x)\n\
-ln\t\t     natural logarithm function (log(e, x))\n\
+ln\t\t     natural logarithm(log(e, x))\n\
 sqrt\t\t     square root\n\
 abs\t\t     absolute value\n\
 ceil\t\t     ceiling function\n\
