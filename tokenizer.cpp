@@ -49,7 +49,9 @@ const double T_E  = 2.718281828459045;
 
 
 std::queue<token*> parser::get_tokens(const std::string& s) {
+	if (s.empty()) throw parser_exception("error : function is empty", 0);
 	std::queue<token*> tokens;
+	token* before, * front;
 	int pos = 0, len = s.length();
 	while (pos < len) {
 
@@ -61,7 +63,6 @@ std::queue<token*> parser::get_tokens(const std::string& s) {
 
 		// symbol
 		if (s[pos] == 'x') {
-			if (!tokens.empty() && tokens.back()->type == T_CONSTANT) tokens.push(new t_operator(pos, '*'));
 			tokens.push(new t_symbol(pos));
 			pos++;
 			continue;
@@ -103,7 +104,6 @@ std::queue<token*> parser::get_tokens(const std::string& s) {
 
 		// parenthesis
 		if (s[pos] == '(') {
-			if (!tokens.empty() && (tokens.back()->type == T_SYMBOL || tokens.back()->type == T_CONSTANT || tokens.back()->type == T_RIGHT_PAREN)) tokens.push(new t_operator(pos, '*'));  
 			tokens.push(new t_left_paren(pos));
 			pos++;
 			continue;
@@ -145,6 +145,33 @@ std::queue<token*> parser::get_tokens(const std::string& s) {
 		throw parser_exception("invalid token", pos);
 
 	}
+
+
+	// put hidden multiplies
+	// 1. constant + symbol
+	// 2. constant + left_paren
+	// 3. symbol + left_paren
+	// 4. right_paren + left_paren
+	// 5. constant + function
+	// 6. symbol + function
+	len = tokens.size();
+	before = tokens.front();
+	tokens.push(before); tokens.pop();
+	front = tokens.front();
+	for (int i=1; i<len; i++) {
+		if ((before->type == T_CONSTANT && front->type == T_SYMBOL) || 
+			(before->type == T_CONSTANT && front->type == T_LEFT_PAREN) ||
+			(before->type == T_SYMBOL && front->type == T_LEFT_PAREN) ||
+			(before->type == T_RIGHT_PAREN && front->type == T_LEFT_PAREN) ||
+			(before->type == T_CONSTANT && front->type == T_FUNCTION) ||
+			(before->type == T_SYMBOL && front->type == T_FUNCTION)
+		) {
+			tokens.push(new t_operator(front->pos, '*'));
+		}
+		tokens.push(front); tokens.pop();
+		before = front;
+		front = tokens.front();
+	}	
 
 	return tokens;
 }
