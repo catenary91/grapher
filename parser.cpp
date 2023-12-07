@@ -5,7 +5,7 @@ parser::parser(const std::string& s) {
 	std::queue<token*> tokens = get_tokens(s);
 	check_syntax(tokens);
 	std::stack<token*> op;
-	t_operator* o1;
+	t_operator* o1, * o2;
 	while (!tokens.empty()) {
 		token* t = tokens.front(); tokens.pop();
 
@@ -20,7 +20,7 @@ parser::parser(const std::string& s) {
 		case T_OPERATOR:
 			o1 = (t_operator*)t;
 			while (!op.empty() && op.top()->type != T_LEFT_PAREN) {
-				t_operator* o2 = (t_operator*)op.top();
+				o2 = (t_operator*)op.top();
 				if (!(o2->priority > o1->priority || (o2->priority == o1->priority && o1->c == '^'))) break;
 				equation.push_back(op.top());
 				op.pop();
@@ -47,6 +47,7 @@ parser::parser(const std::string& s) {
 			break;
 		} // switch
 	} // while
+	
 	while (!op.empty()) {
 		equation.push_back(op.top()); op.pop();
 	}
