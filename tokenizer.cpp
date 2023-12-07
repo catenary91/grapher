@@ -51,7 +51,6 @@ const double T_E  = 2.718281828459045;
 std::queue<token*> parser::get_tokens(const std::string& s) {
 	if (s.empty()) throw parser_exception("error : function is empty", 0);
 	std::queue<token*> tokens;
-	token* before, * front;
 	int pos = 0, len = s.length();
 	while (pos < len) {
 
@@ -70,24 +69,6 @@ std::queue<token*> parser::get_tokens(const std::string& s) {
 
 		// constant
 		if (isdigit(s[pos])) {
-			size_t cnt;
-			double d = std::stod(s.substr(pos), &cnt);
-			tokens.push(new t_constant(pos, d));
-			pos += cnt;
-			continue;
-		}
-
-		// -x
-		if (s.length() - pos >= 2 && s[pos] == '-' && s[pos + 1] == 'x' && (tokens.empty() || tokens.back()->type == T_LEFT_PAREN || tokens.back()->type == T_COMMA)) {
-			tokens.push(new t_constant(pos, -1)); // -1
-			tokens.push(new t_operator(pos + 1, '*')); // *
-			tokens.push(new t_symbol(pos + 1)); // x
-			pos += 2;
-			continue;
-		}
-
-		// negative constant
-		if (s.length() - pos >= 2 && s[pos] == '-' && isdigit(s[pos+1]) && (tokens.empty() || tokens.back()->type == T_LEFT_PAREN || tokens.back()->type == T_COMMA)) {
 			size_t cnt;
 			double d = std::stod(s.substr(pos), &cnt);
 			tokens.push(new t_constant(pos, d));
@@ -129,12 +110,14 @@ std::queue<token*> parser::get_tokens(const std::string& s) {
 			continue;
 		}
 
+		// Euler's number e
 		if (s[pos] == 'e') {
 			tokens.push(new t_constant(pos, T_E));
 			pos++;
 			continue;
 		}
 
+		// pi
 		if (s.length() - pos >= 2 && s[pos] == 'p' && s[pos + 1] == 'i') {
 			tokens.push(new t_constant(pos, T_PI));
 			pos += 2;
@@ -145,33 +128,6 @@ std::queue<token*> parser::get_tokens(const std::string& s) {
 		throw parser_exception("invalid token", pos);
 
 	}
-
-
-	// put hidden multiplies
-	// 1. constant + symbol
-	// 2. constant + left_paren
-	// 3. symbol + left_paren
-	// 4. right_paren + left_paren
-	// 5. constant + function
-	// 6. symbol + function
-	len = tokens.size();
-	before = tokens.front();
-	tokens.push(before); tokens.pop();
-	front = tokens.front();
-	for (int i=1; i<len; i++) {
-		if ((before->type == T_CONSTANT && front->type == T_SYMBOL) || 
-			(before->type == T_CONSTANT && front->type == T_LEFT_PAREN) ||
-			(before->type == T_SYMBOL && front->type == T_LEFT_PAREN) ||
-			(before->type == T_RIGHT_PAREN && front->type == T_LEFT_PAREN) ||
-			(before->type == T_CONSTANT && front->type == T_FUNCTION) ||
-			(before->type == T_SYMBOL && front->type == T_FUNCTION)
-		) {
-			tokens.push(new t_operator(front->pos, '*'));
-		}
-		tokens.push(front); tokens.pop();
-		before = front;
-		front = tokens.front();
-	}	
 
 	return tokens;
 }

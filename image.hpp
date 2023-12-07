@@ -42,7 +42,7 @@ public:
         return data[index];
     }
 
-    // referred lines.cpp
+    // referred to lines.cpp
     void save(const std::string& path) {
         FILE *f = fopen(path.c_str(), "wb");    
         png_structp png_ptr;
