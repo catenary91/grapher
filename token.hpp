@@ -7,18 +7,19 @@ enum TOKEN_TYPE {
 	T_CONSTANT,
 	T_SYMBOL,
 	T_OPERATOR,
-	T_LEFT_PAREN,
-	T_RIGHT_PAREN,
+	T_LEFT_PAREN,  // left parenthesis
+	T_RIGHT_PAREN, // right parenthesis
 	T_COMMA,
 	T_FUNCTION,
 };
 
 enum FUNCTION_TYPE {
-	F_1,
-	F_2,
+	F_1, // function with 1 argument
+	F_2, // function with 2 arguments
 };
 
 enum FUNCTION {
+	// F_1
 	SINH,
 	COSH,
 	TANH,
@@ -38,6 +39,7 @@ enum FUNCTION {
 	CEIL,
 	FLOOR,
 
+	// F_2
 	LOG,
 	MIN,
 	MAX,

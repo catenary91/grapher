@@ -68,10 +68,9 @@ public:
             x = xmin;
             y = ymin;
 
-            for (int pixel_x = 0; pixel_x < width; pixel_x++) {
+            for (pixel_x = 0; pixel_x < width; pixel_x++) {
                 y = ymin;
                 value = p.evaluate(x);
-                // std::printf("x=%lf, y=%lf, isnan=%d\n", x, value, isnan(value));
                 if (std::isnan(value) || std::isinf(value)) { //만약 value가 부적절 하면 그 줄은 스킵
                     x += interval_x;
                     pre_x = pixel_x;

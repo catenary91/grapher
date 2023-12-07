@@ -1,6 +1,7 @@
 #include "parser.hpp"
 #include <cmath>
 
+// evaluate F_1
 double evaluate1(FUNCTION f, double a) {
 	switch (f) {
 	case SINH:
@@ -45,6 +46,7 @@ double evaluate1(FUNCTION f, double a) {
 	}
 }
 
+// evaluate F_2
 double evaluate2(FUNCTION f, double a, double b) {
 	switch (f) {
 	case LOG:
@@ -61,8 +63,8 @@ double evaluate2(FUNCTION f, double a, double b) {
 double parser::evaluate(double value) {
 	std::stack<double> s;
 	int len = equation.size();
-	double a, b;
-	double tmp;
+	double a, b, tmp;
+	t_function* f;
 	for (int i = 0; i < len; i++) {
 		switch (equation[i]->type) {
 		case T_CONSTANT:
@@ -95,7 +97,7 @@ double parser::evaluate(double value) {
 			}
 			break;
 		case T_FUNCTION:
-			t_function* f = (t_function*)equation[i];
+			f = (t_function*)equation[i];
 			if (f->ftype == F_1) {
 				a = s.top(); s.pop();
 				tmp = evaluate1(f->f, a);
@@ -108,6 +110,8 @@ double parser::evaluate(double value) {
 			if (std::isnan(tmp)) return tmp;
 			s.push(tmp);
 			break;
+		default:
+			return std::nan("");
 		}
 	}
 	return s.top();

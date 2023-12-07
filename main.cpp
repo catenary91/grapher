@@ -13,10 +13,10 @@ const char* help_msg = "\
 grapher : a graphing program based on libpng\n\n\
 usage:\n\
 grapher [-xmin X_MIN] [-xmax X_MAX] [-ymin Y_MIN] [-ymax Y_MAX] -width WIDTH -height HEIGHT -o FILE_PATH -f \"EQUATION\"\n\n\
--xmin\t\tminimum of the domain (default -10)\n\
--xmax\t\tmaximum of the domain (default 10)\n\
--ymin\t\tminimum of the codomain (default -10)\n\
--ymax\t\tmaximum of the codomain (default 10)\n\
+-xmin\t\tminimum of the domain (default is -10)\n\
+-xmax\t\tmaximum of the domain (default is 10)\n\
+-ymin\t\tminimum of the codomain (default is -10)\n\
+-ymax\t\tmaximum of the codomain (default is 10)\n\
 -width\t\twidth of the output image\n\
 -height\t\theight of the output image\n\
 -o\t\timage file path to write\n\
@@ -78,12 +78,12 @@ int main(int argc, char** argv) {
 		g.draw(xmin, xmax, ymin, ymax, height, width).save(path);
 		cout << "done!\n";
 	}
-	catch (string msg) {
+	catch (string& msg) {
 		cout << msg;
 		cout << "\nenter \"grapher -help\" to see usages\n";
 		return 1;
 	}
-	catch (const parser_exception& ex) {
+	catch (parser_exception& ex) {
 		cout << f << '\n';
 		for (int i = 0; i < ex.pos; i++) cout << ' ';
 		cout << '^' << ex.msg << '\n';
