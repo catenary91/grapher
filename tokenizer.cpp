@@ -71,6 +71,15 @@ std::queue<token*> parser::get_tokens(const std::string& s) {
 			continue;
 		}
 
+		// negative constant
+		if (s.length() - pos >= 2 && s[pos] == '-' && isdigit(s[pos+1]) && (tokens.empty() || tokens.back()->type == T_LEFT_PAREN)) {
+			size_t cnt;
+			double d = std::stod(s.substr(pos), &cnt);
+			tokens.push(new t_constant(pos, d));
+			pos += cnt;
+			continue;
+		}
+
 		// operator
 		if (s[pos] == '+' || s[pos] == '-' || s[pos] == '*' || s[pos] == '/' || s[pos] == '^') {
 			tokens.push(new t_operator(pos, s[pos]));
