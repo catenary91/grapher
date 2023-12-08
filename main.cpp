@@ -27,14 +27,11 @@ sinh, cosh, tanh     hyperbolic functions\n\
 asin, acos, atan     inverse trigonometric functions\n\
 asinh, acosh, atanh  inverse hyperbolic functions\n\
 exp\t\t     exponential function (e^x)\n\
-ln\t\t     natural logarithm\n\
+log\t\t     natural logarithm\n\
 sqrt\t\t     square root\n\
 abs\t\t     absolute value\n\
 ceil\t\t     ceiling function\n\
 floor\t\t     floor function\n\
-log(a, b)\t     the logarithm of b to base a\n\
-max(a, b)\t     maximum value of a, b\n\
-min(a, b)\t     minimum value of a, b \n\
 \
 ";
 
