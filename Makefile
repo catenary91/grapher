@@ -2,9 +2,9 @@ CC = g++
 PARSER_HEADERS = token.hpp parser.hpp
 OBJS = tokenizer.o syntax_checker.o parser.o evaluator.o main.o
 TARGET = grapher
-CXXFLAGS = -Wall -O2 -std=c++17
+CXXFLAGS = -Wall -O2 -std=c++14
 
-grapher : $(OBJS)
+$(TARGET) : $(OBJS)
 	$(CC) $(CXXFLAGS) $(OBJS) -lpng -o $(TARGET)
 
 tokenizer.o : $(PARSER_HEADERS) tokenizer.cpp

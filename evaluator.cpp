@@ -1,8 +1,7 @@
 #include "parser.hpp"
 #include <cmath>
 
-// evaluate F_1
-double evaluate1(FUNCTION f, double a) {
+double evaluate_f(FUNCTION f, double a) {
 	switch (f) {
 	case SINH:
 		return sinh(a);
@@ -30,7 +29,7 @@ double evaluate1(FUNCTION f, double a) {
 		return atan(a);
 	case EXP:
 		return exp(a);
-	case LN:
+	case LOG:
 		return log(a);
 	case SQRT:
 		return sqrt(a);
@@ -46,29 +45,16 @@ double evaluate1(FUNCTION f, double a) {
 	}
 }
 
-// evaluate F_2
-double evaluate2(FUNCTION f, double a, double b) {
-	switch (f) {
-	case LOG:
-		return log(b) / log(a);
-	case MAX:
-		return a > b ? a : b;
-	case MIN:
-		return a > b ? b : a;
-	default:
-		return std::nan("");
-	}
-}
-
 double parser::evaluate(double value) {
 	std::stack<double> s;
 	int len = equation.size();
 	double a, b, tmp;
 	t_function* f;
 	for (int i = 0; i < len; i++) {
-		switch (equation[i]->type) {
+		token* t = equation[i];
+		switch (t->type) {
 		case T_CONSTANT:
-			s.push(((t_constant*)equation[i])->data);
+			s.push(((t_constant*)t)->data);
 			break;
 		case T_SYMBOL:
 			s.push(value);
@@ -76,7 +62,7 @@ double parser::evaluate(double value) {
 		case T_OPERATOR:
 			b = s.top(); s.pop();
 			a = s.top(); s.pop();
-			switch (((t_operator*)equation[i])->c) {
+			switch (((t_operator*)t)->c) {
 			case '+':
 				s.push(a + b);
 				break;
@@ -97,16 +83,9 @@ double parser::evaluate(double value) {
 			}
 			break;
 		case T_FUNCTION:
-			f = (t_function*)equation[i];
-			if (f->ftype == F_1) {
-				a = s.top(); s.pop();
-				tmp = evaluate1(f->f, a);
-			}
-			else {
-				b = s.top(); s.pop();
-				a = s.top(); s.pop();
-				tmp = evaluate2(f->f, a, b);
-			}
+			f = (t_function*)t;
+			a = s.top(); s.pop();
+			tmp = evaluate_f(f->f, a);
 			if (std::isnan(tmp)) return tmp;
 			s.push(tmp);
 			break;

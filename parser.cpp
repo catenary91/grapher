@@ -27,13 +27,6 @@ parser::parser(const std::string& s) {
 			}
 			op.push(t);
 			break;
-		case T_COMMA:
-			while (op.top()->type != T_LEFT_PAREN) {
-				equation.push_back(op.top());
-				op.pop();
-			}
-			delete t;
-			break;
 		case T_LEFT_PAREN:
 			op.push(t);
 			break;

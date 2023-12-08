@@ -2,44 +2,39 @@
 
 struct f_data {
 	std::string name;
-	FUNCTION_TYPE ftype;
 	FUNCTION f;
 
-	f_data(const std::string n, FUNCTION f, FUNCTION_TYPE ft) : name(n), ftype(ft), f(f) {}
+	f_data(const std::string n, FUNCTION f) : name(n), f(f) {}
 	bool match(const std::string& s, int pos) const {
 		return name.compare(0, name.length(), s, pos, name.length()) == 0;
 	}
 };
 
 const f_data FUNCTIONS[] = {
-	f_data("sinh", SINH, F_1),
-	f_data("cosh", COSH, F_1),
-	f_data("tanh", TANH, F_1),
-	f_data("sin", SIN, F_1),
-	f_data("cos", COS, F_1),
-	f_data("tan", TAN, F_1),
-	f_data("asinh", ASINH, F_1),
-	f_data("acosh", ACOSH, F_1),
-	f_data("atanh", ATANH, F_1),
-	f_data("asin", ASIN, F_1),
-	f_data("acos", ACOS, F_1),
-	f_data("atan", ATAN, F_1),
-	f_data("exp", EXP, F_1),
-	f_data("ln", LN, F_1),
-	f_data("sqrt", SQRT, F_1),
-	f_data("abs", ABS, F_1),
-	f_data("ceil", CEIL, F_1),
-	f_data("floor", FLOOR, F_1),
-
-	f_data("log", LOG, F_2),
-	f_data("max", MAX, F_2),
-	f_data("min", MIN, F_2),
+	f_data("sinh", SINH),
+	f_data("cosh", COSH),
+	f_data("tanh", TANH),
+	f_data("sin", SIN),
+	f_data("cos", COS),
+	f_data("tan", TAN),
+	f_data("asinh", ASINH),
+	f_data("acosh", ACOSH),
+	f_data("atanh", ATANH),
+	f_data("asin", ASIN),
+	f_data("acos", ACOS),
+	f_data("atan", ATAN),
+	f_data("exp", EXP),
+	f_data("log", LOG),
+	f_data("sqrt", SQRT),
+	f_data("abs", ABS),
+	f_data("ceil", CEIL),
+	f_data("floor", FLOOR),
 };
 const int F_CNT = sizeof(FUNCTIONS) / sizeof(f_data);
 
 token* parse_function(const std::string& s, int pos) {
 	for (int i = 0; i < F_CNT; i++) {
-		if (s.length() - pos >= FUNCTIONS[i].name.length() && FUNCTIONS[i].match(s, pos)) return new t_function(pos, FUNCTIONS[i].name, FUNCTIONS[i].f, FUNCTIONS[i].ftype);
+		if (s.length() - pos >= FUNCTIONS[i].name.length() && FUNCTIONS[i].match(s, pos)) return new t_function(pos, FUNCTIONS[i].name, FUNCTIONS[i].f);
 	}
 	return NULL;
 }
@@ -95,13 +90,6 @@ std::queue<token*> parser::get_tokens(const std::string& s) {
 			continue;
 		}
 
-		// comma
-		if (s[pos] == ',') {
-			tokens.push(new t_comma(pos));
-			pos++;
-			continue;
-		}
-
 		// function
 		token* t = parse_function(s, pos);
 		if (t != NULL) {
@@ -110,7 +98,7 @@ std::queue<token*> parser::get_tokens(const std::string& s) {
 			continue;
 		}
 
-		// Euler's number e
+		// e
 		if (s[pos] == 'e') {
 			tokens.push(new t_constant(pos, T_E));
 			pos++;

@@ -9,17 +9,10 @@ enum TOKEN_TYPE {
 	T_OPERATOR,
 	T_LEFT_PAREN,  // left parenthesis
 	T_RIGHT_PAREN, // right parenthesis
-	T_COMMA,
 	T_FUNCTION,
 };
 
-enum FUNCTION_TYPE {
-	F_1, // function with 1 argument
-	F_2, // function with 2 arguments
-};
-
 enum FUNCTION {
-	// F_1
 	SINH,
 	COSH,
 	TANH,
@@ -33,16 +26,11 @@ enum FUNCTION {
 	ACOS,
 	ATAN,
 	EXP,
-	LN,
+	LOG,
 	SQRT,
 	ABS,
 	CEIL,
 	FLOOR,
-
-	// F_2
-	LOG,
-	MIN,
-	MAX,
 };
 
 struct token {
@@ -93,16 +81,10 @@ struct t_right_paren : token {
 	virtual std::string to_string() { return ")"; }
 };
 
-struct t_comma : token {
-	t_comma(int p) : token(p, T_COMMA) {}
-	virtual std::string to_string() { return ","; }
-};
-
 struct t_function : token {
-	FUNCTION_TYPE ftype;
 	FUNCTION f;
 	std::string name;
-	t_function(int p, std::string n, FUNCTION f, FUNCTION_TYPE ft) : token(p, T_FUNCTION), ftype(ft), f(f), name(n) {}
+	t_function(int p, std::string n, FUNCTION f) : token(p, T_FUNCTION), f(f), name(n) {}
 	virtual std::string to_string() { return name; }
 };
 
