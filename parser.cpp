@@ -32,6 +32,7 @@ parser::parser(const std::string& s) {
 				equation.push_back(op.top());
 				op.pop();
 			}
+			delete t;
 			break;
 		case T_LEFT_PAREN:
 			op.push(t);
@@ -40,14 +41,15 @@ parser::parser(const std::string& s) {
 			while (op.top()->type != T_LEFT_PAREN) {
 				equation.push_back(op.top()); op.pop();
 			}
-			op.pop();
+			delete op.top(); op.pop(); // '('
 			if (!op.empty() && op.top()->type == T_FUNCTION) {
 				equation.push_back(op.top()); op.pop();
 			}
+			delete t; // ')'
 			break;
 		} // switch
 	} // while
-	
+
 	while (!op.empty()) {
 		equation.push_back(op.top()); op.pop();
 	}
