@@ -1,7 +1,7 @@
 #include "parser.hpp"
 #include <cmath>
 
-double evaluate_f(FUNCTION f, double a) {
+inline double evaluate_f(FUNCTION f, double a) {
 	switch (f) {
 	case SINH:
 		return sinh(a);
@@ -47,11 +47,9 @@ double evaluate_f(FUNCTION f, double a) {
 
 double parser::evaluate(double value) {
 	std::stack<double> s;
-	int len = equation.size();
 	double a, b, tmp;
 	p_function f;
-	for (int i = 0; i < len; i++) {
-		p_token t = equation[i];
+	for (auto t : equation) {
 		switch (t->type) {
 		case T_CONSTANT:
 			s.push(std::dynamic_pointer_cast<t_constant>(t)->data);
