@@ -18,8 +18,8 @@ class parser {
 public:
 	parser(const std::string& s);  // in parser.hpp
 	void print() {
-		for (int i = 0; i < equation.size(); i++) {
-			std::cout << equation[i]->to_string() << ' ';
+		for (auto t : equation) {
+			std::cout << t->to_string() << ' ';
 		}
 	}
 	double evaluate(double value); // in evaluator.cpp
