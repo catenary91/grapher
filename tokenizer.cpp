@@ -33,20 +33,20 @@ const f_data FUNCTIONS[] = {
 };
 const int F_CNT = sizeof(FUNCTIONS) / sizeof(f_data);
 
-std::shared_ptr<token> parse_function(const std::string& s, int pos) {
+p_token parse_function(const std::string& s, int pos) {
 	for (int i = 0; i < F_CNT; i++) {
 		if (s.length() - pos >= FUNCTIONS[i].name.length() && FUNCTIONS[i].match(s, pos)) return std::make_shared<t_function>(pos, FUNCTIONS[i].name, FUNCTIONS[i].f);
 	}
-	return std::shared_ptr<token>();
+	return p_token();
 }
 
 const double T_PI = 3.141592653589793;
 const double T_E  = 2.718281828459045;
 
 
-std::queue<std::shared_ptr<token>> parser::get_tokens(const std::string& s) {
+std::queue<p_token> parser::get_tokens(const std::string& s) {
 	if (s.empty()) throw parser_exception("error : function is empty", 0);
-	std::queue<std::shared_ptr<token>> tokens;
+	std::queue<p_token> tokens;
 	int pos = 0, len = s.length();
 	while (pos < len) {
 
@@ -101,7 +101,7 @@ std::queue<std::shared_ptr<token>> parser::get_tokens(const std::string& s) {
 		}
 
 		// function
-		std::shared_ptr<token> t = parse_function(s, pos);
+		p_token t = parse_function(s, pos);
 		if (t) {
 			tokens.push(t);
 			pos += std::dynamic_pointer_cast<t_function>(t)->name.length();

@@ -49,9 +49,9 @@ double parser::evaluate(double value) {
 	std::stack<double> s;
 	int len = equation.size();
 	double a, b, tmp;
-	std::shared_ptr<t_function> f;
+	p_function f;
 	for (int i = 0; i < len; i++) {
-		std::shared_ptr<token> t = equation[i];
+		p_token t = equation[i];
 		switch (t->type) {
 		case T_CONSTANT:
 			s.push(std::dynamic_pointer_cast<t_constant>(t)->data);

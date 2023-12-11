@@ -1,12 +1,12 @@
 #include "parser.hpp"
  
-void parser::check_syntax(std::queue<std::shared_ptr<token>> tokens) {
-	std::shared_ptr<token> back = tokens.back();
-	std::stack<std::shared_ptr<token>> s;
+void parser::check_syntax(std::queue<p_token> tokens) {
+	p_token back = tokens.back();
+	std::stack<p_token> s;
 
 	while (!tokens.empty()) {
-		std::shared_ptr<token> t = tokens.front(); tokens.pop();
-		std::shared_ptr<token> top = s.empty() ? NULL : s.top(), tmp;
+		p_token t = tokens.front(); tokens.pop();
+		p_token top = s.empty() ? NULL : s.top(), tmp;
 		switch (t->type) {
 		case T_CONSTANT:
 		case T_SYMBOL:

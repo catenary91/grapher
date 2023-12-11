@@ -2,10 +2,10 @@
 
 // shunting yard algorithm
 parser::parser(const std::string& s) {
-	std::queue<std::shared_ptr<token>> tokens = get_tokens(s);
+	std::queue<p_token> tokens = get_tokens(s);
 	check_syntax(tokens);
-	std::stack<std::shared_ptr<token>> op;
-	std::shared_ptr<t_operator> o1, o2;
+	std::stack<p_token> op;
+	p_operator o1, o2;
 	while (!tokens.empty()) {
 		auto t = tokens.front(); tokens.pop();
 

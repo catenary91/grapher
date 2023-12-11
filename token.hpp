@@ -2,6 +2,7 @@
 #define __TOKEN__
 
 #include <string>
+#include <memory>
 
 enum TOKEN_TYPE {
 	T_CONSTANT,
@@ -87,5 +88,13 @@ struct t_function : token {
 	t_function(int p, std::string n, FUNCTION f) : token(p, T_FUNCTION), f(f), name(n) {}
 	virtual std::string to_string() { return name; }
 };
+
+using p_token = std::shared_ptr<token>;
+using p_constant = std::shared_ptr<t_constant>;
+using p_symbol = std::shared_ptr<t_symbol>;
+using p_operator = std::shared_ptr<t_operator>;
+using p_left_paren = std::shared_ptr<t_left_paren>;
+using p_right_paren = std::shared_ptr<t_right_paren>;
+using p_function = std::shared_ptr<t_function>;
 
 #endif

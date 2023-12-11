@@ -25,9 +25,9 @@ public:
 	}
 	double evaluate(double value); // in evaluator.cpp
 private:
-	std::vector<std::shared_ptr<token>> equation;
-	static void check_syntax(std::queue<std::shared_ptr<token>> tokens); // in syntax_checker.cpp
-	static std::queue<std::shared_ptr<token>> get_tokens(const std::string& s); // in tokenizer.cpp
+	std::vector<p_token> equation;
+	static void check_syntax(std::queue<p_token> tokens); // in syntax_checker.cpp
+	static std::queue<p_token> get_tokens(const std::string& s); // in tokenizer.cpp
 };
 
 #endif
