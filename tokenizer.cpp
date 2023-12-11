@@ -34,8 +34,8 @@ const f_data FUNCTIONS[] = {
 const int F_CNT = sizeof(FUNCTIONS) / sizeof(f_data);
 
 p_token parse_function(const std::string& s, int pos) {
-	for (int i = 0; i < F_CNT; i++) {
-		if (s.length() - pos >= FUNCTIONS[i].name.length() && FUNCTIONS[i].match(s, pos)) return std::make_shared<t_function>(pos, FUNCTIONS[i].name, FUNCTIONS[i].f);
+	for (auto f : FUNCTIONS) {
+		if (f.match(s, pos)) return std::make_shared<t_function>(pos, f.name, f.f);
 	}
 	return p_token();
 }
@@ -101,8 +101,7 @@ std::queue<p_token> parser::get_tokens(const std::string& s) {
 		}
 
 		// function
-		p_token t = parse_function(s, pos);
-		if (t) {
+		if (p_token t = parse_function(s, pos); t) {
 			tokens.push(t);
 			pos += std::dynamic_pointer_cast<t_function>(t)->name.length();
 			continue;
