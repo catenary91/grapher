@@ -49,12 +49,12 @@ double parser::evaluate(double value) {
 	std::stack<double> s;
 	int len = equation.size();
 	double a, b, tmp;
-	t_function* f;
+	std::shared_ptr<t_function> f;
 	for (int i = 0; i < len; i++) {
-		token* t = equation[i];
+		std::shared_ptr<token> t = equation[i];
 		switch (t->type) {
 		case T_CONSTANT:
-			s.push(((t_constant*)t)->data);
+			s.push(std::dynamic_pointer_cast<t_constant>(t)->data);
 			break;
 		case T_SYMBOL:
 			s.push(value);
@@ -62,7 +62,7 @@ double parser::evaluate(double value) {
 		case T_OPERATOR:
 			b = s.top(); s.pop();
 			a = s.top(); s.pop();
-			switch (((t_operator*)t)->c) {
+			switch (std::dynamic_pointer_cast<t_operator>(t)->c) {
 			case '+':
 				s.push(a + b);
 				break;
@@ -83,7 +83,7 @@ double parser::evaluate(double value) {
 			}
 			break;
 		case T_FUNCTION:
-			f = (t_function*)t;
+			f = std::dynamic_pointer_cast<t_function>(t);
 			a = s.top(); s.pop();
 			tmp = evaluate_f(f->f, a);
 			if (std::isnan(tmp)) return tmp;

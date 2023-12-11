@@ -2,12 +2,12 @@
 
 // shunting yard algorithm
 parser::parser(const std::string& s) {
-	std::queue<token*> tokens = get_tokens(s);
+	std::queue<std::shared_ptr<token>> tokens = get_tokens(s);
 	check_syntax(tokens);
-	std::stack<token*> op;
-	t_operator* o1, * o2;
+	std::stack<std::shared_ptr<token>> op;
+	std::shared_ptr<t_operator> o1, o2;
 	while (!tokens.empty()) {
-		token* t = tokens.front(); tokens.pop();
+		auto t = tokens.front(); tokens.pop();
 
 		switch (t->type) {
 		case T_CONSTANT:
@@ -18,9 +18,9 @@ parser::parser(const std::string& s) {
 			op.push(t);
 			break;
 		case T_OPERATOR:
-			o1 = (t_operator*)t;
+			o1 = std::dynamic_pointer_cast<t_operator>(t);
 			while (!op.empty() && op.top()->type != T_LEFT_PAREN) {
-				o2 = (t_operator*)op.top();
+				o2 = std::dynamic_pointer_cast<t_operator>(op.top());
 				if (!(o2->priority > o1->priority || (o2->priority == o1->priority && o1->c == '^'))) break;
 				equation.push_back(op.top());
 				op.pop();
@@ -34,11 +34,10 @@ parser::parser(const std::string& s) {
 			while (op.top()->type != T_LEFT_PAREN) {
 				equation.push_back(op.top()); op.pop();
 			}
-			delete op.top(); op.pop(); // '('
+			op.pop(); // '('
 			if (!op.empty() && op.top()->type == T_FUNCTION) {
 				equation.push_back(op.top()); op.pop();
 			}
-			delete t; // ')'
 			break;
 		} // switch
 	} // while

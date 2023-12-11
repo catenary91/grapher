@@ -1,3 +1,4 @@
+#include <memory>
 #include "parser.hpp"
 
 struct f_data {
@@ -32,20 +33,20 @@ const f_data FUNCTIONS[] = {
 };
 const int F_CNT = sizeof(FUNCTIONS) / sizeof(f_data);
 
-token* parse_function(const std::string& s, int pos) {
+std::shared_ptr<token> parse_function(const std::string& s, int pos) {
 	for (int i = 0; i < F_CNT; i++) {
-		if (s.length() - pos >= FUNCTIONS[i].name.length() && FUNCTIONS[i].match(s, pos)) return new t_function(pos, FUNCTIONS[i].name, FUNCTIONS[i].f);
+		if (s.length() - pos >= FUNCTIONS[i].name.length() && FUNCTIONS[i].match(s, pos)) return std::make_shared<t_function>(pos, FUNCTIONS[i].name, FUNCTIONS[i].f);
 	}
-	return NULL;
+	return std::shared_ptr<token>();
 }
 
 const double T_PI = 3.141592653589793;
 const double T_E  = 2.718281828459045;
 
 
-std::queue<token*> parser::get_tokens(const std::string& s) {
+std::queue<std::shared_ptr<token>> parser::get_tokens(const std::string& s) {
 	if (s.empty()) throw parser_exception("error : function is empty", 0);
-	std::queue<token*> tokens;
+	std::queue<std::shared_ptr<token>> tokens;
 	int pos = 0, len = s.length();
 	while (pos < len) {
 
@@ -57,7 +58,7 @@ std::queue<token*> parser::get_tokens(const std::string& s) {
 
 		// symbol
 		if (s[pos] == 'x') {
-			tokens.push(new t_symbol(pos));
+			tokens.push(std::make_shared<t_symbol>(pos));
 			pos++;
 			continue;
 		}
@@ -66,7 +67,7 @@ std::queue<token*> parser::get_tokens(const std::string& s) {
 		if (isdigit(s[pos])) {
 			size_t cnt;
 			double d = std::stod(s.substr(pos), &cnt);
-			tokens.push(new t_constant(pos, d));
+			tokens.push(std::make_shared<t_constant>(pos, d));
 			pos += cnt;
 			continue;
 		}
@@ -75,48 +76,48 @@ std::queue<token*> parser::get_tokens(const std::string& s) {
 		if (s.length() - pos >= 2 && s[pos] == '-' && isdigit(s[pos+1]) && (tokens.empty() || tokens.back()->type == T_LEFT_PAREN)) {
 			size_t cnt;
 			double d = std::stod(s.substr(pos), &cnt);
-			tokens.push(new t_constant(pos, d));
+			tokens.push(std::make_shared<t_constant>(pos, d));
 			pos += cnt;
 			continue;
 		}
 
 		// operator
 		if (s[pos] == '+' || s[pos] == '-' || s[pos] == '*' || s[pos] == '/' || s[pos] == '^') {
-			tokens.push(new t_operator(pos, s[pos]));
+			tokens.push(std::make_shared<t_operator>(pos, s[pos]));
 			pos++;
 			continue;
 		}
 
 		// parenthesis
 		if (s[pos] == '(') {
-			tokens.push(new t_left_paren(pos));
+			tokens.push(std::make_shared<t_left_paren>(pos));
 			pos++;
 			continue;
 		}
 		if (s[pos] == ')') {
-			tokens.push(new t_right_paren(pos));
+			tokens.push(std::make_shared<t_right_paren>(pos));
 			pos++;
 			continue;
 		}
 
 		// function
-		token* t = parse_function(s, pos);
-		if (t != NULL) {
+		std::shared_ptr<token> t = parse_function(s, pos);
+		if (t) {
 			tokens.push(t);
-			pos += ((t_function*)t)->name.length();
+			pos += std::dynamic_pointer_cast<t_function>(t)->name.length();
 			continue;
 		}
 
 		// e
 		if (s[pos] == 'e') {
-			tokens.push(new t_constant(pos, T_E));
+			tokens.push(std::make_shared<t_constant>(pos, T_E));
 			pos++;
 			continue;
 		}
 
 		// pi
 		if (s.length() - pos >= 2 && s[pos] == 'p' && s[pos + 1] == 'i') {
-			tokens.push(new t_constant(pos, T_PI));
+			tokens.push(std::make_shared<t_constant>(pos, T_PI));
 			pos += 2;
 			continue;
 		}
